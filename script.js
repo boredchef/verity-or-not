@@ -1,10 +1,17 @@
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
+
 const questionContainerElement = document.getElementById('question-container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons');
 
+const scoreContainerElement = document.getElementById('score-container')
+const highScoreElement = document.getElementById('highscore')
+const scoreElement = document.getElementById('score')
+
 let shuffledQuestions, currentQuestionIndex
+
+let score = 0, highscore = 0
 
 startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
@@ -15,6 +22,8 @@ nextButton.addEventListener('click', () => {
 function startGame() {
     console.log('Started')
     startButton.classList.add('hide')
+    scoreContainerElement.classList.add('hide')
+
     shuffledQuestions = questions.sort(() => Math.random() - .5)
     currentQuestionIndex = 0
     questionContainerElement.classList.remove('hide')
@@ -53,6 +62,11 @@ function resetState() {
 function selectAnswer(e) {
     const selectedButton = e.target
     const correct = selectedButton.dataset.correct
+
+    if(correct) {
+        score++
+    }
+
     setStatusClass(document.body,correct)
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
@@ -61,7 +75,9 @@ function selectAnswer(e) {
         nextButton.classList.remove('hide')
     } else {
         startButton.innerText = 'Restart'
+        startButton.style.background = '#333'
         startButton.classList.remove('hide')
+        updateScore()
     }
 
 }
@@ -80,12 +96,72 @@ function clearStatusClass(element) {
     element.classList.remove('wrong');
 }
 
+
+function clearScore() {
+    if(score > highscore) { 
+        highscore = score
+    }
+    score = 0
+}
+
+function updateScore() {
+    scoreElement.innerText = score
+    clearScore()
+    highScoreElement.innerText = highscore
+    scoreContainerElement.classList.remove('hide')
+}
+
 const questions = [
     {
         question: 'What is 2+2?',
         answers: [
             { text: '4', correct: true },
             { text: '2', correct: false }
+        ]
+    },
+    {
+        question: 'What is the capital of France?',
+        answers: [
+            {text: 'Paris', correct: true},
+            {text: 'Seattle', correct: false},
+            {text: 'New York City', correct: false},
+            {text: 'Moscow', correct: false},
+        ]
+    },
+    {
+        question: 'Which planet is known as the Red Planet?',
+        answers: [
+            { text: 'Mars', correct: true },
+            { text: 'Venus', correct: false },
+            { text: 'Jupiter', correct: false },
+            { text: 'Saturn', correct: false }
+        ]
+    },
+    {
+        question: 'What is the chemical symbol for gold?',
+        answers: [
+            { text: 'Au', correct: true },
+            { text: 'Ag', correct: false },
+            { text: 'Gd', correct: false },
+            { text: 'Go', correct: false }
+        ]
+    },
+    {
+        question: 'Who painted the Mona Lisa?',
+        answers: [
+            { text: 'Leonardo da Vinci', correct: true },
+            { text: 'Vincent van Gogh', correct: false },
+            { text: 'Pablo Picasso', correct: false },
+            { text: 'Claude Monet', correct: false }
+        ]
+    },
+    {
+        question: 'What is the largest ocean on Earth?',
+        answers: [
+            { text: 'Pacific Ocean', correct: true },
+            { text: 'Atlantic Ocean', correct: false },
+            { text: 'Indian Ocean', correct: false },
+            { text: 'Arctic Ocean', correct: false }
         ]
     }
 ]

@@ -80,6 +80,29 @@ body.wrong {
     align-items: center;
 }
 
+.score {
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 7vh;
+    color: #333;
+}
+
+.score > * {
+    flex-grow: 1;
+    flex-basis: 0;
+    padding: 0 2vh;
+    margin: 1vh 0;
+    opacity: .5;
+}
+
+.score > :first-child {
+    text-align: right;
+    border-right: .5vh solid #333
+}
+
+
+
 .hide {
     display: none;
 }
