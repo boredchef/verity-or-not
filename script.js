@@ -3,6 +3,7 @@ import { questions } from './questions.js'
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
 
+const startScreenElement = document.getElementById('start-screen')
 const questionContainerElement = document.getElementById('question-container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons');
@@ -23,7 +24,7 @@ nextButton.addEventListener('click', () => {
 
 function startGame() {
     console.log('Started')
-    startButton.classList.add('hide')
+    startScreenElement.classList.add('hide')
     scoreContainerElement.classList.add('hide')
 
     shuffledQuestions = questions.sort(() => Math.random() - .5)
@@ -73,6 +74,7 @@ function selectAnswer(e) {
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
         button.disabled = true
+        button.style.cursor = 'not-allowed'
     })
     if(shuffledQuestions.length > currentQuestionIndex + 1) {
         nextButton.classList.remove('hide')
