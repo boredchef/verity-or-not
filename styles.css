@@ -63,6 +63,10 @@ h1 {
     border-color: black;
 }
 
+.restart-btn:hover {
+    background-color: #333;
+}
+
 .btn.correct {
     --hue: var(--hue-correct);
     color: black;
@@ -82,8 +86,6 @@ h1 {
     border: 9px ridge #2CABFF;
     margin-top: 10px
 }
-
-
 
 .score {
     display: flex;
@@ -109,4 +111,21 @@ h1 {
 
 .hide {
     display: none;
+}
+
+.progress-timer { 
+    width: 100%;
+    max-width: 400%;
+    height: 20px;
+    border-radius: 10px;
+    background-color: gray;
+    overflow: hidden;
+    margin-bottom: 20px
+}
+
+#timer-bar {
+    height: 100%;
+    width: 100%;
+    background-color: lightblue;
+    transition: width 0.1s linear;
 }

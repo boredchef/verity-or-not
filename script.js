@@ -15,6 +15,8 @@ const scoreElement = document.getElementById('score')
 
 let shuffledQuestions, currentQuestionIndex
 
+let timerInterval = null;
+
 let score = 0, highscore = 0
 
 startButton.addEventListener('click', startGame)
@@ -42,6 +44,7 @@ function setNextQuestion() {
 }
 
 function showQuestion(question) {
+    startTimer(5)
     questionElement.innerText = question.question
     // shuffling around the answers using same shuffle logic
     const shuffledQuestionAnswers = [...question.answers].sort(() => Math.random() - .5)
@@ -86,7 +89,24 @@ function selectAnswer(e) {
         questionContainerElement.classList.add('hide')
         updateScore()
     }
+    clearInterval(timerInterval);
+    timerInterval = null;
 
+}
+
+function showAnswers() {
+    setStatusClass(document.body,false)
+    Array.from(answerButtonsElement.children).forEach(button => {
+        setStatusClass(button, button.dataset.correct)
+        button.disabled = true
+        button.style.cursor = 'not-allowed'
+    })
+    if(shuffledQuestions.length > currentQuestionIndex + 1) {
+        nextButton.classList.remove('hide')
+    } else {
+        questionContainerElement.classList.add('hide')
+        updateScore()
+    }
 }
 
 function setStatusClass(element, correct) {
@@ -116,4 +136,28 @@ function updateScore() {
     clearScore()
     highScoreElement.innerText = highscore
     scoreContainerElement.classList.remove('hide')
+}
+
+function startTimer(duration) {
+    if(timerInterval !== null) {
+        clearInterval(timerInterval);
+    }
+
+    const progressBar = document.getElementById('timer-bar');
+    const totalTime = duration * 1000;
+
+    let timeRemaining = totalTime;
+    timerInterval = setInterval(() => {
+        timeRemaining -= 100;
+
+        const percentage = (timeRemaining / totalTime) * 100;
+
+        progressBar.style.width = `${Math.max(0, percentage)}%`
+
+        if(timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            showAnswers()
+        }
+    }, 100);   
 }
