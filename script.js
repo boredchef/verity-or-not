@@ -2,6 +2,7 @@ import { questions } from './questions.js'
 
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
+const restartButton = document.getElementById('restart-btn')
 
 const startScreenElement = document.getElementById('start-screen')
 const questionContainerElement = document.getElementById('question-container')
@@ -21,6 +22,7 @@ nextButton.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
+restartButton.addEventListener('click', startGame)
 
 function startGame() {
     console.log('Started')
@@ -41,7 +43,9 @@ function setNextQuestion() {
 
 function showQuestion(question) {
     questionElement.innerText = question.question
-    question.answers.forEach(answer => {
+    // shuffling around the answers using same shuffle logic
+    const shuffledQuestionAnswers = [...question.answers].sort(() => Math.random() - .5)
+    shuffledQuestionAnswers.forEach(answer => {
         const button = document.createElement('button')
         button.innerText = answer.text
         button.classList.add('btn')
@@ -79,9 +83,7 @@ function selectAnswer(e) {
     if(shuffledQuestions.length > currentQuestionIndex + 1) {
         nextButton.classList.remove('hide')
     } else {
-        startButton.innerText = 'Restart'
-        startButton.style.background = '#333'
-        startButton.classList.remove('hide')
+        questionContainerElement.classList.add('hide')
         updateScore()
     }
 

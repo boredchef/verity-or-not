@@ -38,6 +38,10 @@ body.wrong {
     box-shadow: 0 0 10px 2px;
 }
 
+h1 {
+    text-align: center;
+}
+
 .btn-grid {
     display: grid;
     grid-template-columns: repeat(2, auto);
@@ -68,24 +72,25 @@ body.wrong {
     --hue: var(--hue-wrong);
 }
 
-.start-btn, .next-btn {
+.start-btn, .next-btn, .restart-btn {
     font-size: 1.5rem;
     font-weight: bold;
     padding: 10px 20px;
 }
 
-.controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.restart-btn {
+    border: 9px ridge #2CABFF;
+    margin-top: 10px
 }
+
+
 
 .score {
     display: flex;
-    justify-content: center;
-    font-weight: bold;
+    justify-content: center; 
+    /* font-weight: bold; */
     font-size: 7vh;
-    color: #333;
+    color: #333;   
 }
 
 .score > * {
@@ -93,7 +98,6 @@ body.wrong {
     flex-basis: 0;
     padding: 0 2vh;
     margin: 1vh 0;
-    opacity: .5;
 }
 
 .score > :first-child {
