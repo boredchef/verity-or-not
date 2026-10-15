@@ -3,9 +3,12 @@ import { questions } from './questions.js'
 const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
 const restartButton = document.getElementById('restart-btn')
+const reviewButton = document.getElementById('review-btn')
 
 const startScreenElement = document.getElementById('start-screen')
 const questionContainerElement = document.getElementById('question-container')
+const reviewQuestionContainerElement = document.getElementById('review-container') 
+const containerElement = document.getElementById('container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons');
 
@@ -37,6 +40,7 @@ nextButton.addEventListener('click', () => {
     setNextQuestion()
 })
 restartButton.addEventListener('click', startGame)
+reviewButton.addEventListener('click', reviewQuestions)
 
 function startGame() {
     console.log('Started')
@@ -203,4 +207,29 @@ function startTimer(duration) {
             showAnswers()
         }
     }, 100);   
+}
+
+function reviewQuestions() {
+    
+    containerElement.classList.add("hide")
+    reviewQuestionContainerElement.classList.remove("hide")
+
+    for(const q of askedQuestionsArray) {
+        const question = document.createElement('ul')
+
+        const questionAsked = document.createElement('li')
+        questionAsked.innerText = q.questionGiven 
+
+        const responseGiven = document.createElement('li')
+        responseGiven.innerText = q.response 
+
+        const seconds = document.createElement('li')
+        seconds.innerText = (q.elapsedMs / 1000)
+
+        const correct = document.createElement('li')
+        correct.innerText = q.correct
+
+        question.append(questionAsked,responseGiven,seconds,correct)
+        reviewQuestionContainerElement.append(question)
+    }
 }

@@ -112,10 +112,6 @@ h1 {
     border-right: .5vh solid #333
 }
 
-.hide {
-    display: none;
-}
-
 .progress-timer { 
     width: 100%;
     max-width: 400%;
@@ -131,4 +127,18 @@ h1 {
     width: 100%;
     background-color: lightblue;
     transition: width 0.1s linear;
+}
+
+.review-container {
+    width: 350px;
+    max-width: 50%;
+    background-color: yellowgreen;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px 2px;
+}
+
+
+.hide {
+    display: none;
 }
