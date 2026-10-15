@@ -82,7 +82,7 @@ h1 {
     --hue: var(--hue-wrong);
 }
 
-.start-btn, .next-btn, .restart-btn {
+.start-btn, .next-btn, .restart-btn, .review-btn {
     font-size: 1.5rem;
     font-weight: bold;
     padding: 10px 20px;
@@ -96,7 +96,6 @@ h1 {
 .score {
     display: flex;
     justify-content: center; 
-    /* font-weight: bold; */
     font-size: 7vh;
     color: #333;   
 }
@@ -112,8 +111,6 @@ h1 {
     text-align: right;
     border-right: .5vh solid #333
 }
-
-
 
 .hide {
     display: none;

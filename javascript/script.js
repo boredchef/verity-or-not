@@ -17,6 +17,18 @@ let shuffledQuestions, currentQuestionIndex
 
 let timerInterval = null;
 
+class ReviewQuestion {
+    constructor(questionNumber, elapsedMs, questionGiven, response, correct) {
+        this.questionNumber = questionNumber
+        this.elapsedMs = elapsedMs
+        this.questionGiven = questionGiven
+        this.response = response
+        this.correct = correct
+    }
+}
+const askedQuestionsArray = [];
+
+
 let score = 0, highscore = 0
 
 startButton.addEventListener('click', startGame)
@@ -28,6 +40,7 @@ restartButton.addEventListener('click', startGame)
 
 function startGame() {
     console.log('Started')
+    askedQuestionsArray.length = 0
     startScreenElement.classList.add('hide')
     scoreContainerElement.classList.add('hide')
 
@@ -43,11 +56,14 @@ function setNextQuestion() {
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
+let startTime;
+
 function showQuestion(question) {
+    startTime = Date.now();
     if(question.duration == undefined) {
-        startTimer(3)
+        startTimer(3 - (score*.25))
     } else {
-        startTimer(question.duration)
+        startTimer(question.duration - (score*.25))
     }
 
     questionElement.innerText = question.question
@@ -75,12 +91,22 @@ function resetState() {
 }
 
 function selectAnswer(e) {
+    const questionNumber = shuffledQuestions[currentQuestionIndex]
+    const elapsedTime = Date.now() - startTime
     const selectedButton = e.target
-    const correct = selectedButton.dataset.correct
+    const correct = selectedButton.dataset.correct ?? 'false'
 
     if(correct) {
         score++  
     } 
+    
+    const review = (new ReviewQuestion(
+            currentQuestionIndex, 
+            elapsedTime, 
+            questionNumber.question, 
+            selectedButton.innerText, 
+            correct))
+    askedQuestionsArray.push(review)
 
     setStatusClass(document.body,correct)
     Array.from(answerButtonsElement.children).forEach(button => {
@@ -92,6 +118,7 @@ function selectAnswer(e) {
         nextButton.classList.remove('hide')
     } else {
         questionContainerElement.classList.add('hide')
+        console.log(askedQuestionsArray)
         updateScore()
     }
     clearInterval(timerInterval);
@@ -100,6 +127,17 @@ function selectAnswer(e) {
 }
 
 function showAnswers() {
+    const questionNumber = shuffledQuestions[currentQuestionIndex]
+    const elapsedTime = Date.now() - startTime
+
+    const review = (new ReviewQuestion(
+            currentQuestionIndex, 
+            elapsedTime, 
+            questionNumber.question, 
+            'ommited', 
+            'false'))
+    askedQuestionsArray.push(review)
+    
     setStatusClass(document.body,false)
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)

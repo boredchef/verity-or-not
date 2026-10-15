@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="styles.css" rel="stylesheet">
-    <script defer type="module" src="questions.js"></script>
-    <script defer type="module" src="script.js"></script>
+    <script defer type="module" src="javascript/questions.js"></script>
+    <script defer type="module" src="javascript/script.js"></script>
+    <link rel="icon" type="image/png" href="assets/smile.png">
     <title>verity or not</title>
 </head>
 <body>
@@ -36,6 +37,16 @@
                 <div>Highscore: <span id="highscore">0</span></div>
             </div>
             <button id="restart-btn" class="restart-btn btn">restart game</button>
+            <button id="review-btn" class="review-btn btn">review answers</button>
+        </div>
+
+        <div id="review-container" class="hide">
+            <button type="button" class="collapsible">Question 1</button>
+            <div class="content">
+                <p>Question: </p>
+                <p>Your Answer: </p>
+                <p>Correct Answer: </p>
+            </div>
         </div>
     </div>
 </body>
