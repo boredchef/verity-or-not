@@ -50,5 +50,15 @@ export const questions = [
             { text: 'Indian Ocean', correct: false },
             { text: 'Arctic Ocean', correct: false }
         ]
+    },
+    {
+        duration: 10,
+        question: 'What does the cow say?',
+        answers: [
+            { text: 'Moo moo moo 🐮', correct: true },
+            { text: 'Chirp chirp chirp', correct: false},
+            { text: 'Oui oui oui', correct: false },
+            { text: 'Meow meow meow', correct: false}
+        ]
     }
 ]

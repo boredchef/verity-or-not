@@ -44,7 +44,12 @@ function setNextQuestion() {
 }
 
 function showQuestion(question) {
-    startTimer(5)
+    if(question.duration == undefined) {
+        startTimer(3)
+    } else {
+        startTimer(question.duration)
+    }
+
     questionElement.innerText = question.question
     // shuffling around the answers using same shuffle logic
     const shuffledQuestionAnswers = [...question.answers].sort(() => Math.random() - .5)
