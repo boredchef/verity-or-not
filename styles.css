@@ -19,14 +19,20 @@ body {
     justify-content: center;
     align-items: center;
     background-color: hsl(var(--hue), 100%, 20%);
+    background: transparent url("assets/smile.png") repeat scroll 0 0;
+    background-size: 5%
 }
 
 body.correct {
     --hue: var(--hue-correct);
+    background: transparent url("assets/correct.png") repeat scroll 0 0;
+    background-size: 5%
 }
 
 body.wrong {
     --hue: var(--hue-wrong);
+    background: transparent url("assets/wrong.png") repeat scroll 0 0;
+    background-size: 5%
 }
 
 .container {
