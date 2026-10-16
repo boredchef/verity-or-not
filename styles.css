@@ -131,14 +131,26 @@ h1 {
 
 .review-container {
     width: 350px;
+    height: 80vh;
     max-width: 50%;
     background-color: yellowgreen;
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 0 10px 2px;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
 }
 
 
 .hide {
     display: none;
+}
+
+ul {
+    font-weight: bold;
+}
+
+li {
+    font-weight: normal;
 }
