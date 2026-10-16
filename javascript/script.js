@@ -216,20 +216,19 @@ function reviewQuestions() {
 
     for(const q of askedQuestionsArray) {
         const question = document.createElement('ul')
-
-        const questionAsked = document.createElement('li')
-        questionAsked.innerText = q.questionGiven 
+        question.innerText = `Question #${q.questionNumber +1}: ${q.questionGiven}`
 
         const responseGiven = document.createElement('li')
-        responseGiven.innerText = q.response 
+        responseGiven.innerText = `your answer: ${q.response}` 
 
         const seconds = document.createElement('li')
-        seconds.innerText = (q.elapsedMs / 1000)
+        seconds.innerText = `you took ${(q.elapsedMs / 1000)} seconds `
 
         const correct = document.createElement('li')
-        correct.innerText = q.correct
+        const isCorrect = q.correct == 'true'
+        correct.innerText = `you got this question ${isCorrect ? "correct!" : "incorrect."}`
 
-        question.append(questionAsked,responseGiven,seconds,correct)
+        question.append(responseGiven,seconds,correct)
         reviewQuestionContainerElement.append(question)
     }
 }
