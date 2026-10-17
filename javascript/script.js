@@ -100,7 +100,7 @@ function selectAnswer(e) {
     const questionNumber = shuffledQuestions[currentQuestionIndex]
     const elapsedTime = Date.now() - startTime
     const selectedButton = e.target
-    const correct = selectedButton.dataset.correct ?? 'false'
+    const correct = selectedButton.dataset.correct ?? false
 
     if(correct) {
         score++  
@@ -208,16 +208,19 @@ function reviewQuestions() {
     reviewQuestionContainerElement.classList.remove("hide")
 
     for(const q of askedQuestionsArray) {
-        const question = document.createElement('ul')
-        question.innerText = `Question #${q.questionNumber +1}: ${q.questionGiven}`
+        const question = document.createElement('details')
+        const sum = document.createElement('summary')
 
-        const responseGiven = document.createElement('li')
+        sum.innerText = `Question #${q.questionNumber +1}: ${q.questionGiven}`
+        question.appendChild(sum)
+
+        const responseGiven = document.createElement('p')
         responseGiven.innerText = `your answer: ${q.response}` 
 
-        const seconds = document.createElement('li')
+        const seconds = document.createElement('p')
         seconds.innerText = `you took ${(q.elapsedMs / 1000)} seconds `
 
-        const correct = document.createElement('li')
+        const correct = document.createElement('p')
         const isCorrect = q.correct == 'true'
         correct.innerText = `you got this question ${isCorrect ? "correct!" : "incorrect."}`
 
