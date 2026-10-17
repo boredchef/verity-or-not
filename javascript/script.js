@@ -4,6 +4,7 @@ const startButton = document.getElementById('start-btn')
 const nextButton = document.getElementById('next-btn')
 const restartButton = document.getElementById('restart-btn')
 const reviewButton = document.getElementById('review-btn')
+const backButton = document.getElementById('back-btn')
 
 const startScreenElement = document.getElementById('start-screen')
 const questionContainerElement = document.getElementById('question-container')
@@ -41,6 +42,7 @@ nextButton.addEventListener('click', () => {
 })
 restartButton.addEventListener('click', startGame)
 reviewButton.addEventListener('click', reviewQuestions)
+backButton.addEventListener('click', goBack)
 
 function startGame() {
     console.log('Started')
@@ -222,4 +224,9 @@ function reviewQuestions() {
         question.append(responseGiven,seconds,correct)
         reviewQuestionContainerElement.append(question)
     }
+}
+
+function goBack() {
+    containerElement.classList.remove("hide")
+    reviewQuestionContainerElement.classList.add("hide")
 }

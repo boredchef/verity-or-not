@@ -82,7 +82,7 @@ h1 {
     --hue: var(--hue-wrong);
 }
 
-.start-btn, .next-btn, .restart-btn, .review-btn {
+.start-btn, .next-btn, .restart-btn, .review-btn, .back-btn {
     font-size: 1.5rem;
     font-weight: bold;
     padding: 10px 20px;
@@ -91,6 +91,10 @@ h1 {
 .restart-btn {
     border: 9px ridge #2CABFF;
     margin-top: 10px
+}
+
+.back-btn {
+    margin-inline: auto;
 }
 
 .score {
@@ -130,9 +134,9 @@ h1 {
 }
 
 .review-container {
-    width: 350px;
+    width: 500px;
     height: 80vh;
-    max-width: 50%;
+    max-width: 80%;
     background-color: yellowgreen;
     border-radius: 5px;
     padding: 10px;
@@ -140,8 +144,8 @@ h1 {
     overflow: scroll;
     scroll-behavior: smooth;
     scrollbar-width: none;
+    border: 9px solid green;
 }
-
 
 .hide {
     display: none;
