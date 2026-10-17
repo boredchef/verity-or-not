@@ -8,7 +8,8 @@ const backButton = document.getElementById('back-btn')
 
 const startScreenElement = document.getElementById('start-screen')
 const questionContainerElement = document.getElementById('question-container')
-const reviewQuestionContainerElement = document.getElementById('review-container') 
+const reviewQuestionContainerElement = document.getElementById('review-container')
+const reviewListElement = document.getElementById('review-list') 
 const containerElement = document.getElementById('container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons');
@@ -205,6 +206,7 @@ function startTimer(duration) {
 function reviewQuestions() {
     
     containerElement.classList.add("hide")
+    reviewListElement.replaceChildren()
     reviewQuestionContainerElement.classList.remove("hide")
 
     for(const q of askedQuestionsArray) {
@@ -225,7 +227,7 @@ function reviewQuestions() {
         correct.innerText = `you got this question ${isCorrect ? "correct!" : "incorrect."}`
 
         question.append(responseGiven,seconds,correct)
-        reviewQuestionContainerElement.append(question)
+        reviewListElement.append(question)
     }
 }
 

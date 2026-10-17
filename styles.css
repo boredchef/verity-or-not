@@ -135,7 +135,7 @@ h1 {
 
 .review-container {
     width: 500px;
-    height: 80vh;
+    height: auto;
     max-width: 80%;
     background-color: yellowgreen;
     border-radius: 5px;
