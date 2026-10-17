@@ -104,14 +104,32 @@ function selectAnswer(e) {
         score++  
     } 
     
-    const review = (new ReviewQuestion(
+    const review = new ReviewQuestion(
             currentQuestionIndex, 
             elapsedTime, 
             questionNumber.question, 
             selectedButton.innerText, 
-            correct))
+            correct)
     askedQuestionsArray.push(review)
+    showAnswers(correct)
+}
 
+function ranOutOfTime() {
+    const questionNumber = shuffledQuestions[currentQuestionIndex]
+    const elapsedTime = Date.now() - startTime
+
+    const review = (new ReviewQuestion(
+            currentQuestionIndex, 
+            elapsedTime, 
+            questionNumber.question, 
+            'ommited', 
+            'false'))
+    askedQuestionsArray.push(review)
+    
+    showAnswers(false)
+}
+
+function showAnswers(correct) {
     setStatusClass(document.body,correct)
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
@@ -127,33 +145,6 @@ function selectAnswer(e) {
     }
     clearInterval(timerInterval);
     timerInterval = null;
-
-}
-
-function showAnswers() {
-    const questionNumber = shuffledQuestions[currentQuestionIndex]
-    const elapsedTime = Date.now() - startTime
-
-    const review = (new ReviewQuestion(
-            currentQuestionIndex, 
-            elapsedTime, 
-            questionNumber.question, 
-            'ommited', 
-            'false'))
-    askedQuestionsArray.push(review)
-    
-    setStatusClass(document.body,false)
-    Array.from(answerButtonsElement.children).forEach(button => {
-        setStatusClass(button, button.dataset.correct)
-        button.disabled = true
-        button.style.cursor = 'not-allowed'
-    })
-    if(shuffledQuestions.length > currentQuestionIndex + 1) {
-        nextButton.classList.remove('hide')
-    } else {
-        questionContainerElement.classList.add('hide')
-        updateScore()
-    }
 }
 
 function setStatusClass(element, correct) {
@@ -204,7 +195,7 @@ function startTimer(duration) {
         if(timeRemaining <= 0) {
             clearInterval(timerInterval);
             timerInterval = null;
-            showAnswers()
+            ranOutOfTime()
         }
     }, 100);   
 }
