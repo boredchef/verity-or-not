@@ -65,7 +65,7 @@ let startTime;
 function showQuestion(question) {
     startTime = Date.now();
     if(question.duration == undefined) {
-        startTimer(3 - (score*.25))
+        startTimer(5 - (score*.25))
     } else {
         startTimer(question.duration - (score*.25))
     }
