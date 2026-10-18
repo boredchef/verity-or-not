@@ -245,6 +245,7 @@ function reviewQuestions() {
 
         const correct = document.createElement('p')
         const isCorrect = q.correct == 'true'
+        question.classList.add(isCorrect ? "correct" : "wrong");
         correct.innerText = `you got this question ${isCorrect ? "correct!" : "incorrect."}`
 
         question.append(responseGiven,seconds,correct)

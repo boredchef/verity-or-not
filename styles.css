@@ -161,14 +161,37 @@ summary {
     color: white;
 }
 
+summary::marker {
+    content: '+ '
+}
+
+
+details[open] summary::marker {
+    content: '- '
+}
+
 details {
-    border: 2px solid rgb(22, 46, 22);
-    background-color: rgb(219, 46, 46);
+    color: white;
     font-weight: normal;
     margin: 5px 
 }
 
-details[open] {
-    background-color: rgb(197, 89, 89)
+details.correct {
+    border: 2px solid rgb(117, 223, 117);
+    background-color: hsl(var(--hue-correct), 100%, 30%);
 }
+
+details.wrong { 
+    border: 2px solid rgb(247, 171, 171);
+    background-color: hsl(var(--hue-wrong), 100%, 30%);
+}
+
+/* 
+details[open].correct {
+    background-color: lime
+}
+
+details[open].wrong {
+    background-color: red
+} */
 
