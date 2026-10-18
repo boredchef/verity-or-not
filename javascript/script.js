@@ -36,6 +36,10 @@ const askedQuestionsArray = [];
 
 
 let score = 0, highscore = 0
+let startTime;
+
+
+loadSave()
 
 startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
@@ -46,6 +50,39 @@ restartButton.addEventListener('click', startGame)
 reviewButton.addEventListener('click', reviewQuestions)
 backButton.addEventListener('click', goBack)
 
+function saveGame() {
+    const gameState = {
+        score: score,
+        highscore: highscore,
+        currentIndex: currentQuestionIndex,
+        questionHistory: askedQuestionsArray,
+        shuffledQuestions: shuffledQuestions
+    };
+    localStorage.setItem('gameSave', JSON.stringify(gameState));
+}
+
+function loadSave() {
+    const savedGame = localStorage.getItem('gameSave');
+    if(savedGame) {
+        const gameState = JSON.parse(savedGame);
+        
+        score = gameState.score;
+        highscore = gameState.highscore;
+        currentQuestionIndex = gameState.currentIndex;
+        shuffledQuestions = gameState.shuffledQuestions;
+
+        askedQuestionsArray.length = 0;
+        askedQuestionsArray.push(...gameState.questionHistory)
+    }
+    if(savedGame && currentQuestionIndex >= 0) {
+        startScreenElement.classList.add("hide");
+        showQuestion(shuffledQuestions[currentQuestionIndex])
+        questionContainerElement.classList.remove("hide")
+    } else {
+        console.log(savedGame)
+    }
+}
+
 function startGame() {
     console.log('Started')
     askedQuestionsArray.length = 0
@@ -53,9 +90,11 @@ function startGame() {
     scoreContainerElement.classList.add('hide')
 
     shuffledQuestions = questions.sort(() => Math.random() - .5)
+
     currentQuestionIndex = 0
     questionContainerElement.classList.remove('hide')
     setNextQuestion()
+    saveGame()
 
 }
 
@@ -63,8 +102,6 @@ function setNextQuestion() {
     resetState()
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
-
-let startTime;
 
 function showQuestion(question) {
     startTime = Date.now();
@@ -86,6 +123,7 @@ function showQuestion(question) {
         button.addEventListener('click', selectAnswer)
         answerButtonsElement.appendChild(button)
     })
+    saveGame()
     
 }
 
@@ -115,6 +153,7 @@ function selectAnswer(e) {
             correct)
     askedQuestionsArray.push(review)
     showAnswers(correct)
+    saveGame()
 }
 
 function ranOutOfTime() {
@@ -130,6 +169,7 @@ function ranOutOfTime() {
     askedQuestionsArray.push(review)
     
     showAnswers(false)
+    saveGame()
 }
 
 function showAnswers(correct) {
@@ -173,6 +213,7 @@ function clearScore() {
 }
 
 function updateScore() {
+    saveGame()
     verdict()
     scoreElement.innerText = score
     clearScore()

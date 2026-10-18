@@ -96,6 +96,10 @@ h1 {
     padding: 10px 20px;
 }
 
+.back-btn { 
+    background-color: green;
+}
+
 .restart-btn {
     margin-top: 10px
 }
@@ -140,14 +144,32 @@ h1 {
     width: 500px;
     height: auto;
     max-width: 80%;
+    max-height: 80vh;
     background-color: yellowgreen;
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 0 10px 2px;
-    overflow: scroll;
+    overflow-y: auto;
     scroll-behavior: smooth;
-    scrollbar-width: none;
     border: 9px solid green;
+} 
+
+.review-container::-webkit-scrollbar { 
+    width: 5px;
+}
+
+
+.review-container::-webkit-scrollbar-button { 
+    background: yellowgreen;
+}
+
+.review-container::-webkit-scrollbar-track { 
+    background: yellowgreen;
+}
+
+.review-container::-webkit-scrollbar-thumb { 
+    background: white;
+    border-radius: 10px;
 }
 
 .hide {
