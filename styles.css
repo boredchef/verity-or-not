@@ -42,6 +42,7 @@ body.wrong {
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 0 10px 2px;
+    font-size: clamp(2rem, 3vw, 4rem)
 }
 
 h1 {
@@ -89,12 +90,7 @@ h1 {
 }
 
 .restart-btn {
-    border: 9px ridge #2CABFF;
     margin-top: 10px
-}
-
-.back-btn {
-    margin-inline: auto;
 }
 
 .score {
@@ -158,3 +154,4 @@ ul {
 li {
     font-weight: normal;
 }
+

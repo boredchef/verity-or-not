@@ -13,6 +13,7 @@ const reviewListElement = document.getElementById('review-list')
 const containerElement = document.getElementById('container')
 const questionElement = document.getElementById('question')
 const answerButtonsElement = document.getElementById('answer-buttons');
+const verdictElement = document.getElementById('verdict');
 
 const scoreContainerElement = document.getElementById('score-container')
 const highScoreElement = document.getElementById('highscore')
@@ -173,10 +174,31 @@ function clearScore() {
 }
 
 function updateScore() {
+    verdict()
     scoreElement.innerText = score
     clearScore()
     highScoreElement.innerText = highscore
     scoreContainerElement.classList.remove('hide')
+}
+
+function verdict() {
+    const numQuestions = askedQuestionsArray.length;
+    const grade = Math.trunc((score / numQuestions) * 100);
+    console.log(grade);
+    let gradeMsg = "..."
+    if (grade > 70) {
+        gradeMsg = `noice.`
+    } else if (grade > 60) {
+        gradeMsg = `nah.`
+    } else if (grade > 50) {
+        gradeMsg = `poop`
+    } else if (grade > 40) {
+        gradeMsg = `brah`
+    } else if (grade <= 40) {
+        gradeMsg = `restart bro.`
+    }
+    verdictElement.innerText = `${grade}% correct: ${gradeMsg}`;
+
 }
 
 function startTimer(duration) {
