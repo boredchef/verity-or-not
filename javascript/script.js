@@ -75,7 +75,6 @@ function showQuestion(question) {
     }
 
     questionElement.innerText = question.question
-    // shuffling around the answers using same shuffle logic
     const shuffledQuestionAnswers = [...question.answers].sort(() => Math.random() - .5)
     shuffledQuestionAnswers.forEach(answer => {
         const button = document.createElement('button')
@@ -198,7 +197,6 @@ function verdict() {
         gradeMsg = `restart bro.`
     }
     verdictElement.innerText = `${grade}% correct: ${gradeMsg}`;
-
 }
 
 function startTimer(duration) {
@@ -227,6 +225,7 @@ function startTimer(duration) {
 
 function reviewQuestions() {
     
+    clearStatusClass(document.body)
     containerElement.classList.add("hide")
     reviewListElement.replaceChildren()
     reviewQuestionContainerElement.classList.remove("hide")

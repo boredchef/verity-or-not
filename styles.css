@@ -56,6 +56,13 @@ h1 {
     margin: 20px 0;
 }
 
+.score-btns {
+    padding: 5px;
+    display: grid;
+    gap: 10px;
+
+}
+
 .btn {
     --hue: var(--hue-neutral);
     border: 1px solid hsl(var(--hue), 100%, 30%);
@@ -147,11 +154,21 @@ h1 {
     display: none;
 }
 
-ul {
+summary {
     font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    color: white;
 }
 
-li {
+details {
+    border: 2px solid rgb(22, 46, 22);
+    background-color: rgb(219, 46, 46);
     font-weight: normal;
+    margin: 5px 
+}
+
+details[open] {
+    background-color: rgb(197, 89, 89)
 }
 
