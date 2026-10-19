@@ -22,6 +22,7 @@ const scoreElement = document.getElementById('score')
 let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
 let timerInterval = null;
+let timerExpire;
 
 class ReviewQuestion {
     constructor(questionNumber, elapsedMs, questionGiven, response, correct) {
@@ -60,7 +61,8 @@ function saveGame() {
         shuffledQuestions: shuffledQuestions,
         currentShuffledAnswers: currentShuffledAnswers,
         isAnswered: isAnswered,
-        isGameOver: isGameOver
+        isGameOver: isGameOver,
+        timerExpire: timerExpire
     };
     localStorage.setItem('gameSave', JSON.stringify(gameState));
 }
@@ -77,10 +79,12 @@ function loadSave() {
         currentShuffledAnswers = gameState.currentShuffledAnswers || [];
         isAnswered = gameState.isAnswered;
         isGameOver = gameState.isGameOver;
+        timerExpire = gameState.timerExpire;
 
         askedQuestionsArray.length = 0;
         askedQuestionsArray.push(...gameState.questionHistory)
     }
+
     if(savedGame && isGameOver == true) {
         startScreenElement.classList.add("hide")
         scoreContainerElement.classList.remove("hide")
@@ -96,7 +100,7 @@ function loadSave() {
     } 
     else if(savedGame && currentQuestionIndex >= 0 && !isAnswered) {
         startScreenElement.classList.add("hide");
-        showQuestion(shuffledQuestions[currentQuestionIndex])
+        showQuestion(shuffledQuestions[currentQuestionIndex], true, timerExpire)
         questionContainerElement.classList.remove("hide")
     } 
     else {
@@ -125,7 +129,7 @@ function setNextQuestion() {
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
-function showQuestion(question, isRestoring = false) {
+function showQuestion(question, isRestoring = false, expireTimestamp = null) {
     questionElement.innerText = question.question
     
     let answerButtons;
@@ -147,18 +151,33 @@ function showQuestion(question, isRestoring = false) {
         answerButtonsElement.appendChild(button)
     })
 
+    if(isRestoring && expireTimestamp ) {
+        const timeRemaining = expireTimestamp - Date.now();
+        if (timeRemaining <= 0) {
+            ranOutOfTime();
+            return;
+        } else {
+            startTimer(timeRemaining / 1000);
+            return;
+        }
+    }
     if(isRestoring) { 
         return;
     }
-
-    startTime = Date.now();
+    let durationInSeconds, expirationTime; 
     if(question.duration == undefined) {
-        startTimer(5 - (score*.25))
-    } else {
-        startTimer(question.duration - (score*.25))
+        question.duration = 5;
     }
+    durationInSeconds = question.duration - (score*.25)
+
+    expirationTime = Date.now() + (durationInSeconds * 1000);
+    timerExpire = expirationTime;
+
+    startTimer(durationInSeconds)
     isAnswered = false;
-    saveGame()    
+    saveGame();
+    
+
 }
 
 function resetState() {
@@ -277,6 +296,7 @@ function verdict() {
 }
 
 function startTimer(duration) {
+
     if(timerInterval !== null) {
         clearInterval(timerInterval);
     }
@@ -285,6 +305,7 @@ function startTimer(duration) {
     const totalTime = duration * 1000;
 
     let timeRemaining = totalTime;
+
     timerInterval = setInterval(() => {
         timeRemaining -= 100;
 
