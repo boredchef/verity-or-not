@@ -27,4 +27,3 @@ to understand quiz logic i used webdev simplified [build a quiz app](https://you
 | question correct | score screen | review questions |
 |-- |-- | --|
 | <img width="854" height="435" alt="Screenshot 2026-10-18 233431" src="https://github.com/user-attachments/assets/b002fe6d-df45-4ff8-894b-0c7e6ad02553" />| <img width="842" height="483" alt="Screenshot 2026-10-18 232431" src="https://github.com/user-attachments/assets/266bc980-f9fd-46a5-ae1d-923de0608391" /> | <img width="570" height="597" alt="Screenshot 2026-10-18 232513 - Copy" src="https://github.com/user-attachments/assets/00ddcff5-2a91-4982-9271-eccbccad2274" />
- |
