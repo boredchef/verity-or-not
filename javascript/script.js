@@ -38,6 +38,8 @@ const askedQuestionsArray = [];
 let score = 0, highscore = 0
 let startTime;
 
+let isAnswered;
+let isGameOver;
 
 loadSave()
 
@@ -56,7 +58,9 @@ function saveGame() {
         highscore: highscore,
         currentIndex: currentQuestionIndex,
         questionHistory: askedQuestionsArray,
-        shuffledQuestions: shuffledQuestions
+        shuffledQuestions: shuffledQuestions,
+        isAnswered: isAnswered,
+        isGameOver: isGameOver
     };
     localStorage.setItem('gameSave', JSON.stringify(gameState));
 }
@@ -70,21 +74,38 @@ function loadSave() {
         highscore = gameState.highscore;
         currentQuestionIndex = gameState.currentIndex;
         shuffledQuestions = gameState.shuffledQuestions;
+        isAnswered = gameState.isAnswered;
+        isGameOver = gameState.isGameOver;
 
         askedQuestionsArray.length = 0;
         askedQuestionsArray.push(...gameState.questionHistory)
     }
-    if(savedGame && currentQuestionIndex >= 0) {
+    if(savedGame && isGameOver == true) {
+        startScreenElement.classList.add("hide")
+        scoreContainerElement.classList.remove("hide")
+    }
+    else if(savedGame && currentQuestionIndex >= 0 && isAnswered) {
+        startScreenElement.classList.add("hide");
+        showQuestion(shuffledQuestions[currentQuestionIndex], true)
+
+        const historyItem = askedQuestionsArray[currentQuestionIndex]
+        showAnswers(historyItem ? historyItem.correct : false );
+        
+        questionContainerElement.classList.remove("hide")
+    } 
+    else if(savedGame && currentQuestionIndex >= 0 && !isAnswered) {
         startScreenElement.classList.add("hide");
         showQuestion(shuffledQuestions[currentQuestionIndex])
         questionContainerElement.classList.remove("hide")
-    } else {
+    } 
+    else {
         console.log(savedGame)
     }
 }
 
 function startGame() {
     console.log('Started')
+    isGameOver = false;
     askedQuestionsArray.length = 0
     startScreenElement.classList.add('hide')
     scoreContainerElement.classList.add('hide')
@@ -103,14 +124,7 @@ function setNextQuestion() {
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
-function showQuestion(question) {
-    startTime = Date.now();
-    if(question.duration == undefined) {
-        startTimer(5 - (score*.25))
-    } else {
-        startTimer(question.duration - (score*.25))
-    }
-
+function showQuestion(question, isRestoring = false) {
     questionElement.innerText = question.question
     const shuffledQuestionAnswers = [...question.answers].sort(() => Math.random() - .5)
     shuffledQuestionAnswers.forEach(answer => {
@@ -123,8 +137,19 @@ function showQuestion(question) {
         button.addEventListener('click', selectAnswer)
         answerButtonsElement.appendChild(button)
     })
-    saveGame()
-    
+
+    if(isRestoring) { 
+        return;
+    }
+
+    startTime = Date.now();
+    if(question.duration == undefined) {
+        startTimer(5 - (score*.25))
+    } else {
+        startTimer(question.duration - (score*.25))
+    }
+    isAnswered = false;
+    saveGame()    
 }
 
 function resetState() {
@@ -173,6 +198,7 @@ function ranOutOfTime() {
 }
 
 function showAnswers(correct) {
+    isAnswered = true;
     setStatusClass(document.body,correct)
     Array.from(answerButtonsElement.children).forEach(button => {
         setStatusClass(button, button.dataset.correct)
@@ -213,6 +239,7 @@ function clearScore() {
 }
 
 function updateScore() {
+    isGameOver = true;
     saveGame()
     verdict()
     scoreElement.innerText = score
