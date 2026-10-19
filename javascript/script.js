@@ -19,7 +19,7 @@ const scoreContainerElement = document.getElementById('score-container')
 const highScoreElement = document.getElementById('highscore')
 const scoreElement = document.getElementById('score')
 
-let shuffledQuestions, currentQuestionIndex
+let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
 let timerInterval = null;
 
@@ -33,7 +33,6 @@ class ReviewQuestion {
     }
 }
 const askedQuestionsArray = [];
-
 
 let score = 0, highscore = 0
 let startTime;
@@ -59,6 +58,7 @@ function saveGame() {
         currentIndex: currentQuestionIndex,
         questionHistory: askedQuestionsArray,
         shuffledQuestions: shuffledQuestions,
+        currentShuffledAnswers: currentShuffledAnswers,
         isAnswered: isAnswered,
         isGameOver: isGameOver
     };
@@ -74,6 +74,7 @@ function loadSave() {
         highscore = gameState.highscore;
         currentQuestionIndex = gameState.currentIndex;
         shuffledQuestions = gameState.shuffledQuestions;
+        currentShuffledAnswers = gameState.currentShuffledAnswers || [];
         isAnswered = gameState.isAnswered;
         isGameOver = gameState.isGameOver;
 
@@ -126,8 +127,16 @@ function setNextQuestion() {
 
 function showQuestion(question, isRestoring = false) {
     questionElement.innerText = question.question
-    const shuffledQuestionAnswers = [...question.answers].sort(() => Math.random() - .5)
-    shuffledQuestionAnswers.forEach(answer => {
+    
+    let answerButtons;
+    if (isRestoring && currentShuffledAnswers.length > 0) {
+        answerButtons = currentShuffledAnswers;
+    } else { 
+        answerButtons = [...question.answers].sort(() => Math.random() - .5);
+        currentShuffledAnswers = answerButtons
+    }
+
+    answerButtons.forEach(answer => {
         const button = document.createElement('button')
         button.innerText = answer.text
         button.classList.add('btn')
