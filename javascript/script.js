@@ -315,7 +315,7 @@ function verdict() {
     } else if (grade > 40) {
         gradeMsg = `brah`
     } else if (grade <= 40) {
-        gradeMsg = `restart bro.`
+        gradeMsg = `bro.`
     }
     verdictElement.innerText = `${grade}% correct: ${gradeMsg}`;
 }
