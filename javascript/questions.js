@@ -1,5 +1,6 @@
 export const questions = [
     {
+        duration: 8,
         question: 'What is 2+2?',
         answers: [
             { text: '4', correct: true },
@@ -7,6 +8,7 @@ export const questions = [
         ]
     },
     {
+        duration: 9,
         question: 'What is the capital of France?',
         answers: [
             {text: 'Paris', correct: true},
@@ -25,6 +27,7 @@ export const questions = [
         ]
     },
     {
+        duration: 12,
         question: 'What is the chemical symbol for gold?',
         answers: [
             { text: 'Au', correct: true },
@@ -34,6 +37,7 @@ export const questions = [
         ]
     },
     {
+        duration: 3,
         question: 'Who painted the Mona Lisa?',
         answers: [
             { text: 'Leonardo da Vinci', correct: true },
@@ -43,6 +47,7 @@ export const questions = [
         ]
     },
     {
+        duration: 60,
         question: 'What is the largest ocean on Earth?',
         answers: [
             { text: 'Pacific Ocean', correct: true },

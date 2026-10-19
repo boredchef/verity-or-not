@@ -263,7 +263,7 @@ function showAnswers(correct) {
         nextButton.classList.remove('hide')
     } else {
         questionContainerElement.classList.add('hide')
-        console.log(askedQuestionsArray)
+        clearStatusClass(document.body)
         updateScore()
     }
     clearInterval(timerInterval);
