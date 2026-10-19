@@ -22,7 +22,7 @@ const scoreElement = document.getElementById('score')
 let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
 let timerInterval = null;
-let timerExpire;
+let startTime, timerExpire;
 
 class ReviewQuestion {
     constructor(questionNumber, elapsedMs, questionGiven, response, correct) {
@@ -35,8 +35,7 @@ class ReviewQuestion {
 }
 const askedQuestionsArray = [];
 
-let score = 0, highscore = 0
-let startTime;
+let score, highscore = 0;
 
 let isAnswered;
 let isGameOver;
@@ -52,6 +51,19 @@ restartButton.addEventListener('click', startGame)
 reviewButton.addEventListener('click', reviewQuestions)
 backButton.addEventListener('click', goBack)
 
+document.addEventListener('keypress', (e) => {
+    const keyPressed = e.key
+    if (keyPressed == "r") {
+        const a = confirm("u sure u wanna clear save") 
+        if(a) {
+            localStorage.removeItem('gameSave')
+            window.location.reload();
+        } else {
+            return;
+        }
+    }
+})
+
 function saveGame() {
     const gameState = {
         score: score,
@@ -62,7 +74,8 @@ function saveGame() {
         currentShuffledAnswers: currentShuffledAnswers,
         isAnswered: isAnswered,
         isGameOver: isGameOver,
-        timerExpire: timerExpire
+        timerExpire: timerExpire,
+        startTime: startTime
     };
     localStorage.setItem('gameSave', JSON.stringify(gameState));
 }
@@ -80,6 +93,7 @@ function loadSave() {
         isAnswered = gameState.isAnswered;
         isGameOver = gameState.isGameOver;
         timerExpire = gameState.timerExpire;
+        startTime = gameState.startTime
 
         askedQuestionsArray.length = 0;
         askedQuestionsArray.push(...gameState.questionHistory)
@@ -106,11 +120,24 @@ function loadSave() {
     else {
         console.log(savedGame)
     }
+
+    if(savedGame && isGameOver === true) {
+        startScreenElement.classList.add("hide");
+        questionContainerElement.classList.add("hide");
+
+        scoreElement.innerText = score;
+        highScoreElement.innerText = highscore;
+
+        verdict();
+
+        scoreContainerElement.classList.remove("hide");
+    }
 }
 
 function startGame() {
     console.log('Started')
     isGameOver = false;
+    clearScore();
     askedQuestionsArray.length = 0
     startScreenElement.classList.add('hide')
     scoreContainerElement.classList.add('hide')
@@ -175,9 +202,8 @@ function showQuestion(question, isRestoring = false, expireTimestamp = null) {
 
     startTimer(durationInSeconds)
     isAnswered = false;
+    startTime = Date.now()
     saveGame();
-    
-
 }
 
 function resetState() {
@@ -260,9 +286,6 @@ function clearStatusClass(element) {
 
 
 function clearScore() {
-    if(score > highscore) { 
-        highscore = score
-    }
     score = 0
 }
 
@@ -271,7 +294,9 @@ function updateScore() {
     saveGame()
     verdict()
     scoreElement.innerText = score
-    clearScore()
+    if(score > highscore) { 
+        highscore = score
+    }
     highScoreElement.innerText = highscore
     scoreContainerElement.classList.remove('hide')
 }

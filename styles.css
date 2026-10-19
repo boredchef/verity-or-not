@@ -1,6 +1,6 @@
 *, *::before, *::after {
     box-sizing: border-box;
-    font-family: Tahoma;
+    font-family: "Tahoma", sans-serif;
 }
 
 :root {
