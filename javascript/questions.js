@@ -1,69 +1,56 @@
-export const questions = [
-    {
-        duration: 8,
-        question: 'What is 2+2?',
-        answers: [
-            { text: '4', correct: true },
-            { text: '2', correct: false }
-        ]
-    },
-    {
-        duration: 9,
-        question: 'What is the capital of France?',
-        answers: [
-            {text: 'Paris', correct: true},
-            {text: 'Seattle', correct: false},
-            {text: 'New York City', correct: false},
-            {text: 'Moscow', correct: false},
-        ]
-    },
-    {
-        question: 'Which planet is known as the Red Planet?',
-        answers: [
-            { text: 'Mars', correct: true },
-            { text: 'Venus', correct: false },
-            { text: 'Jupiter', correct: false },
-            { text: 'Saturn', correct: false }
-        ]
-    },
-    {
-        duration: 12,
-        question: 'What is the chemical symbol for gold?',
-        answers: [
-            { text: 'Au', correct: true },
-            { text: 'Ag', correct: false },
-            { text: 'Gd', correct: false },
-            { text: 'Go', correct: false }
-        ]
-    },
-    {
-        duration: 3,
-        question: 'Who painted the Mona Lisa?',
-        answers: [
-            { text: 'Leonardo da Vinci', correct: true },
-            { text: 'Vincent van Gogh', correct: false },
-            { text: 'Pablo Picasso', correct: false },
-            { text: 'Claude Monet', correct: false }
-        ]
-    },
-    {
-        duration: 60,
-        question: 'What is the largest ocean on Earth?',
-        answers: [
-            { text: 'Pacific Ocean', correct: true },
-            { text: 'Atlantic Ocean', correct: false },
-            { text: 'Indian Ocean', correct: false },
-            { text: 'Arctic Ocean', correct: false }
-        ]
-    },
-    {
-        duration: 10,
-        question: 'What does the cow say?',
-        answers: [
-            { text: 'Moo moo moo 🐮', correct: true },
-            { text: 'Chirp chirp chirp', correct: false},
-            { text: 'Oui oui oui', correct: false },
-            { text: 'Meow meow meow', correct: false}
-        ]
-    }
-]
+export const questions = {
+    sports: [
+        {
+            question: "Golf is the only sport that has been played on which celestial body?",
+            answers: [
+                { text: "The Moon", correct: true },
+                { text: "Mars", correct: false },
+                { text: "Venus", correct: false },
+                { text: "Titan", correct: false }
+            ],
+            duration: 5
+        },
+        {
+            question: "When basketball was first invented in 1891, what objects were used instead of modern hoops?",
+            answers: [
+                { text: "Peach baskets", correct: true },
+                { text: "Bucket bins", correct: false },
+                { text: "Wooden crates", correct: false },
+                { text: "Laundry hampers", correct: false }
+            ],
+            duration: 5
+        },
+        {
+            question: "How is the Olympic flame traditionally lit before the start of the Games?",
+            answers: [
+                { text: "Using the sun's rays and a parabolic mirror", correct: true },
+                { text: "Using a giant ceremonial torch", correct: false },
+                { text: "With a custom flint striker", correct: false },
+                { text: "Using a match lit in Olympia", correct: false }
+            ],
+            duration: 5
+        }
+    ],
+    math: [
+        {
+            question: "What is the slope of f(x) = 2x + 3?",
+            answers: [
+                { text: "2", correct: true },
+                { text: "3", correct: false },
+                { text: "1", correct: false },
+                { text: "2x", correct: false },
+            ]
+        }
+    ],
+    science: [
+        {
+            question: "What is the chemical symbol for gold?",
+            answers: [
+                { text: "Au", correct: true },
+                { text: "Ag", correct: false },
+                { text: "Go", correct: false },
+                { text: "Gd", correct: false }
+            ]
+        }
+    ]
+}
