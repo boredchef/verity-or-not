@@ -1,14 +1,10 @@
-import { questions } from './questions.js'
+import { questions, getData } from './questions.js'
 
 const startButton = document.getElementById('start-btn');
 const nextButton = document.getElementById('next-btn');
 const restartButton = document.getElementById('restart-btn');
 const reviewButton = document.getElementById('review-btn');
 const backButton = document.getElementById('back-btn');
-
-const sciBtn = document.getElementById('science');
-const mathBtn = document.getElementById('math');
-const sportsBtn = document.getElementById('sports');
 
 const startScreenElement = document.getElementById('start-screen');
 const questionContainerElement = document.getElementById('question-container');
@@ -20,16 +16,16 @@ const answerButtonsElement = document.getElementById('answer-buttons');
 const verdictElement = document.getElementById('verdict');
 
 const scoreContainerElement = document.getElementById('score-container');
-const categoryButtons = document.getElementById('categories');
 const highScoreElement = document.getElementById('highscore');
 const scoreElement = document.getElementById('score');
+const settingsForm = document.getElementById('user-response');
 
 let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
 let timerInterval = null;
 let startTime, timerExpire;
 
-let currentCategory
+const sportsCategory = 21;
 
 class ReviewQuestion {
     constructor(questionNumber, elapsedMs, questionGiven, response, correct) {
@@ -49,6 +45,30 @@ let isGameOver;
 
 loadSave()
 
+settingsForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(settingsForm);
+    const category = formData.get("category");
+    const amount = formData.get("question-count");
+
+    let categoryNum;
+
+    if(category == 'science') categoryNum = 17;
+    if(category == 'math') categoryNum = 19;
+    if(category == 'sports') categoryNum = 21;
+
+    getData(amount, categoryNum);
+
+    shuffledQuestions = shuffle(questions);
+    saveGame();
+    setNextQuestion();
+    settingsForm.classList.add('hide');
+    startScreenElement.classList.add('hide');
+    questionContainerElement.classList.remove('hide');
+
+})
+
 startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
     currentQuestionIndex++
@@ -57,7 +77,6 @@ nextButton.addEventListener('click', () => {
 restartButton.addEventListener('click', startGame)
 reviewButton.addEventListener('click', reviewQuestions)
 backButton.addEventListener('click', goBack)
-
 
 document.addEventListener('keypress', (e) => {
     const keyPressed = e.key
@@ -102,7 +121,6 @@ function loadSave() {
         isGameOver = gameState.isGameOver;
         timerExpire = gameState.timerExpire;
         startTime = gameState.startTime;
-        currentCategory = gameState.currentCategory;
 
         askedQuestionsArray.length = 0;
         askedQuestionsArray.push(...gameState.questionHistory)
@@ -144,46 +162,15 @@ function loadSave() {
 }
 
 function startGame() {
-    console.log('Started')
     isGameOver = false;
     clearScore();
     askedQuestionsArray.length = 0
 
-    startScreenElement.classList.add('hide')
-    scoreContainerElement.classList.add('hide')
-    
+    startButton.classList.add('hide')
+    settingsForm.classList.remove('hide')
+    //scoreContainerElement.classList.add('hide')
 
-    shuffledQuestions = questions.sort(() => Math.random() - .5)
-
-    currentQuestionIndex = 0
-    startScreenElement.classList.add('hide');
-    questionContainerElement.classList.remove('hide')
-    setNextQuestion()
-
-    saveGame()
 }
-
-// mathBtn.addEventListener('click', () => selectCategory('math'));
-// sportsBtn.addEventListener('click', () => selectCategory('sports'));
-// sciBtn.addEventListener('click', () => selectCategory('science'));
-
-// function restartGame() {
-//     localStorage.removeItem('gameSave');
-
-//     score = 0;
-//     currentQuestionIndex = 0;
-//     isGameOver = false;
-//     currentCategory = null;
-//     shuffledQuestions = [];
-//     askedQuestionsArray.length = 0;
-
-//     questionContainerElement.classList.add('hide');
-//     scoreContainerElement.classList.add('hide');
-
-//     startScreenElement.classList.remove('hide');
-//     startButton.classList.remove('hide');
-//     categoryButtons.classList.add('hide');
-// }
 
 function setNextQuestion() {
     resetState()
@@ -413,4 +400,12 @@ function reviewQuestions() {
 function goBack() {
     containerElement.classList.remove("hide")
     reviewQuestionContainerElement.classList.add("hide")
+}
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i+1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }

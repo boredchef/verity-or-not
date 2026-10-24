@@ -57,45 +57,41 @@
 
 export const questions = [];
 
-async function getData(amount, category) {
+export async function getData(amount, category) {
+  let string;
   const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}`;
   try {
+    console.log(`trying this url! ${url}`)
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
 
     const result = await response.json();
-    const string = JSON.stringify(result.results);
-    return string;
+    string = JSON.stringify(result.results);
+    // return string;
   } catch (error) {
     console.error(error.message);
   }
+  
+  return sortToQuestionList(string);
 }
 
-console.log(json)
-
-const data = JSON.parse(json);
-
-console.log(data)
-
-data.forEach(({ question, correct_answer, incorrect_answers }) => {
-  console.log(`question: ${question}`);
-  console.log(`correct: ${correct_answer}`);
-  const answers = [ {text: correct_answer, correct: true} ]
-  incorrect_answers.forEach(a => {
-    console.log(`incorrect: ${a}`)
-    answers.push({ text: a, correct: false });
+function sortToQuestionList(data) {
+  const json = JSON.parse(data);
+  json.forEach(({ question, correct_answer, incorrect_answers }) => {
+    const answers = [ {text: correct_answer, correct: true} ]
+    incorrect_answers.forEach(a => {
+      answers.push({ text: a, correct: false });
+    });
+    const addQuestion = {
+      question: question.toString(),
+      answers: answers,
+      duration: 5
+    }
+    questions.push(addQuestion)
+    
   });
-  const addQuestion = {
-    question: question.toString(),
-    answers: answers,
-    duration: 5
-  }
-  questions.push(addQuestion)
-  
-});
-
-// console.log(questions)
-
-// console.log(data)
+  console.log(questions)
+  console.log("success!")
+}
