@@ -20,6 +20,22 @@
                 <button id="sports" class="btn">sports</button>
                 <button id="science" class="btn">science</button>
             </div>
+            <div id="question-count" class="hide">
+                <label for="fquestion-count-input">how many questions?</label>
+                <input id="question-count-input" type="number" min="1" max="50">
+            </div>
+            <form id="user-response">
+                <label>what category?</label><br>
+                <input type="radio" id="science" name="category" value="science">
+                <label for="science">science</label><br>
+                <input type="radio" id="sports" name="category" value="sports">
+                <label for="sports">sports</label><br>
+                <input type="radio" id="math" name="category" value="math">
+                <label for="math">math</label><br>
+                <label>how many?</label><br>
+                <input type="number" id="question-count-input" name="question-count"><br>
+
+            </form>
         </div>
 
         <div id="question-container" class="hide">

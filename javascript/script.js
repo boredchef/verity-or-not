@@ -49,15 +49,12 @@ let isGameOver;
 
 loadSave()
 
-startButton.addEventListener('click', () => {
-    startButton.classList.add('hide');
-    categoryButtons.classList.remove('hide')
-})
+startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
-restartButton.addEventListener('click', restartGame)
+restartButton.addEventListener('click', startGame)
 reviewButton.addEventListener('click', reviewQuestions)
 backButton.addEventListener('click', goBack)
 
@@ -87,7 +84,6 @@ function saveGame() {
         isGameOver: isGameOver,
         timerExpire: timerExpire,
         startTime: startTime,
-        currentCategory: currentCategory
     };
     localStorage.setItem('gameSave', JSON.stringify(gameState));
 }
@@ -147,20 +143,17 @@ function loadSave() {
     }
 }
 
-function selectCategory(categoryKey) {
+function startGame() {
     console.log('Started')
     isGameOver = false;
     clearScore();
     askedQuestionsArray.length = 0
 
-    currentCategory = categoryKey
-
-    startButton.classList.add('hide')
     startScreenElement.classList.add('hide')
     scoreContainerElement.classList.add('hide')
     
 
-    shuffledQuestions = [...questions[categoryKey]].sort(() => Math.random() - .5)
+    shuffledQuestions = questions.sort(() => Math.random() - .5)
 
     currentQuestionIndex = 0
     startScreenElement.classList.add('hide');
@@ -170,27 +163,27 @@ function selectCategory(categoryKey) {
     saveGame()
 }
 
-mathBtn.addEventListener('click', () => selectCategory('math'));
-sportsBtn.addEventListener('click', () => selectCategory('sports'));
-sciBtn.addEventListener('click', () => selectCategory('science'));
+// mathBtn.addEventListener('click', () => selectCategory('math'));
+// sportsBtn.addEventListener('click', () => selectCategory('sports'));
+// sciBtn.addEventListener('click', () => selectCategory('science'));
 
-function restartGame() {
-    localStorage.removeItem('gameSave');
+// function restartGame() {
+//     localStorage.removeItem('gameSave');
 
-    score = 0;
-    currentQuestionIndex = 0;
-    isGameOver = false;
-    currentCategory = null;
-    shuffledQuestions = [];
-    askedQuestionsArray.length = 0;
+//     score = 0;
+//     currentQuestionIndex = 0;
+//     isGameOver = false;
+//     currentCategory = null;
+//     shuffledQuestions = [];
+//     askedQuestionsArray.length = 0;
 
-    questionContainerElement.classList.add('hide');
-    scoreContainerElement.classList.add('hide');
+//     questionContainerElement.classList.add('hide');
+//     scoreContainerElement.classList.add('hide');
 
-    startScreenElement.classList.remove('hide');
-    startButton.classList.remove('hide');
-    categoryButtons.classList.add('hide');
-}
+//     startScreenElement.classList.remove('hide');
+//     startButton.classList.remove('hide');
+//     categoryButtons.classList.add('hide');
+// }
 
 function setNextQuestion() {
     resetState()
