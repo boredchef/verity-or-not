@@ -246,10 +246,7 @@ function showQuestion(question, isRestoring = false, expireTimestamp = null) {
         return;
     }
     let durationInSeconds, expirationTime; 
-    if(question.duration == undefined) {
-        question.duration = 5;
-    }
-    durationInSeconds = question.duration - (score*.25)
+    durationInSeconds = question.duration
 
     expirationTime = Date.now() + (durationInSeconds * 1000);
     timerExpire = expirationTime;
