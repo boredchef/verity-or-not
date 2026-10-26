@@ -90,10 +90,14 @@ h1 {
     --hue: var(--hue-wrong);
 }
 
-.start-btn, .next-btn, .restart-btn, .review-btn, .back-btn {
+.quit-btn, .start-btn, .next-btn, .restart-btn, .review-btn, .back-btn {
     font-size: 1.5rem;
     font-weight: bold;
     padding: 10px 20px;
+}
+
+.quit-btn {
+    justify-self: end;
 }
 
 .back-btn { 
@@ -208,12 +212,73 @@ details.wrong {
     background-color: hsl(var(--hue-wrong), 100%, 30%);
 }
 
-/* 
-details[open].correct {
-    background-color: lime
+dialog {
+    font-size: 2rem;
+    border: 10px dotted rgb(160, 0, 0);
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
 }
 
-details[open].wrong {
-    background-color: red
-} */
+dialog > h2 {
+    font-size: 2rem;
+    font-weight: bold;
+}
 
+button#confirm-dialog-yes {
+    border: 3px solid green;
+    color: white;
+    background-color: hsl(var(--hue-correct), 100%, 50%);
+    font-size: 2.5rem
+}
+
+button#confirm-dialog-no {
+    border: 3px solid red;
+    color: white;
+    background-color: hsl(var(--hue-wrong), 100%, 70%);
+    font-size: 2.5rem
+}
+
+.form { 
+    border: 5px solid yellow;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+label {display: block;}
+
+button[type=submit] {
+    width: 100%;
+    font-size: 2.5rem;
+    background-color:rgb(72, 209, 72);
+    color: white;
+    padding: 14px; 
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=number], select {
+    width: 100%;
+    padding: 12px;
+    display: inline-block; 
+    margin: 8px 0;
+    border: 1px solid black;
+    box-sizing: border-box;
+}
+
+button[type=submit]:hover {
+    background-color: rgb(55, 163, 55);
+    font-size: 4rem;
+}
+
+.slider-look {
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+}

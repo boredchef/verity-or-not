@@ -1,23 +1,32 @@
-import { questions } from './questions.js'
+import { questions, getData } from './questions.js'
 
-const startButton = document.getElementById('start-btn')
-const nextButton = document.getElementById('next-btn')
-const restartButton = document.getElementById('restart-btn')
-const reviewButton = document.getElementById('review-btn')
-const backButton = document.getElementById('back-btn')
+const startButton = document.getElementById('start-btn');
+const nextButton = document.getElementById('next-btn');
+const restartButton = document.getElementById('restart-btn');
+const reviewButton = document.getElementById('review-btn');
+const backButton = document.getElementById('back-btn');
+const quitButton = document.getElementById('quit-btn');
 
-const startScreenElement = document.getElementById('start-screen')
-const questionContainerElement = document.getElementById('question-container')
-const reviewQuestionContainerElement = document.getElementById('review-container')
-const reviewListElement = document.getElementById('review-list') 
-const containerElement = document.getElementById('container')
-const questionElement = document.getElementById('question')
+const confirmModal = document.getElementById('confirm-dialog');
+const yesBtn = document.getElementById('confirm-dialog-yes');
+const noBtn = document.getElementById('confirm-dialog-no')
+
+const startScreenElement = document.getElementById('start-screen');
+const questionContainerElement = document.getElementById('question-container');
+const reviewQuestionContainerElement = document.getElementById('review-container');
+const reviewListElement = document.getElementById('review-list'); 
+const containerElement = document.getElementById('container');
+const questionElement = document.getElementById('question');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const verdictElement = document.getElementById('verdict');
 
-const scoreContainerElement = document.getElementById('score-container')
-const highScoreElement = document.getElementById('highscore')
-const scoreElement = document.getElementById('score')
+const scoreContainerElement = document.getElementById('score-container');
+const highScoreElement = document.getElementById('highscore');
+const scoreElement = document.getElementById('score');
+const settingsForm = document.getElementById('user-response');
+const slider = document.getElementById("question-count");
+const output = document.getElementById("sliderValue");
+const errorMsg = document.getElementById("error-msg")
 
 let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
@@ -42,27 +51,77 @@ let isGameOver;
 
 loadSave()
 
+slider.addEventListener("input", function() {
+  output.textContent = this.value;
+});
+
+settingsForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(settingsForm);
+    const category = formData.get("category");
+    const amount = formData.get("question-count");
+
+    let categoryNum;
+
+    if(category == 'general') categoryNum = 9;
+    if(category == 'science') categoryNum = 17;
+    if(category == 'math') categoryNum = 19;
+    if(category == 'sports') categoryNum = 21;
+
+    errorMsg.classList.add('hide');
+    errorMsg.innerText = "";
+
+    try {
+        questions.length = 0;
+        await getData(amount, categoryNum);
+
+        shuffledQuestions = shuffle(questions);
+        saveGame();
+        setNextQuestion();
+
+        settingsForm.classList.add('hide');
+        startScreenElement.classList.add('hide');
+        questionContainerElement.classList.remove('hide');
+    } catch (error) {
+        console.error(error);
+        errorMsg.innerText = "too many requests, pls try again later";
+        errorMsg.classList.remove("hide");
+    }
+
+})
+
 startButton.addEventListener('click', startGame)
 nextButton.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
-restartButton.addEventListener('click', startGame)
+restartButton.addEventListener('click', restartGame)
 reviewButton.addEventListener('click', reviewQuestions)
 backButton.addEventListener('click', goBack)
+quitButton.addEventListener('click', doRestart)
 
 document.addEventListener('keypress', (e) => {
     const keyPressed = e.key
     if (keyPressed == "r") {
-        const a = confirm("u sure u wanna clear save") 
-        if(a) {
-            localStorage.removeItem('gameSave')
-            window.location.reload();
-        } else {
-            return;
-        }
+        doRestart()
     }
 })
+
+function doRestart() {
+    confirmModal.showModal(); 
+}
+
+
+yesBtn.addEventListener('click', () => {
+    if(localStorage.getItem('gameSave') == null) return;
+    localStorage.removeItem('gameSave');
+    window.location.reload();
+  });
+
+noBtn.addEventListener('click', () => {
+    confirmModal.close();
+  });
 
 function saveGame() {
     const gameState = {
@@ -75,7 +134,7 @@ function saveGame() {
         isAnswered: isAnswered,
         isGameOver: isGameOver,
         timerExpire: timerExpire,
-        startTime: startTime
+        startTime: startTime,
     };
     localStorage.setItem('gameSave', JSON.stringify(gameState));
 }
@@ -93,7 +152,7 @@ function loadSave() {
         isAnswered = gameState.isAnswered;
         isGameOver = gameState.isGameOver;
         timerExpire = gameState.timerExpire;
-        startTime = gameState.startTime
+        startTime = gameState.startTime;
 
         askedQuestionsArray.length = 0;
         askedQuestionsArray.push(...gameState.questionHistory)
@@ -135,41 +194,48 @@ function loadSave() {
 }
 
 function startGame() {
-    console.log('Started')
     isGameOver = false;
     clearScore();
     askedQuestionsArray.length = 0
-    startScreenElement.classList.add('hide')
-    scoreContainerElement.classList.add('hide')
+    currentQuestionIndex = 0;
 
-    shuffledQuestions = questions.sort(() => Math.random() - .5)
+    startButton.classList.add('hide')
+    settingsForm.classList.remove('hide')
+}
 
-    currentQuestionIndex = 0
-    questionContainerElement.classList.remove('hide')
-    setNextQuestion()
-    saveGame()
+function restartGame() {
+    localStorage.removeItem('gameSave')
 
+    startGame();
+    startScreenElement.classList.remove('hide');
+    scoreContainerElement.classList.add('hide');
 }
 
 function setNextQuestion() {
     resetState()
+
+    if(!shuffledQuestions || !shuffledQuestions[currentQuestionIndex]) {
+        updateScore()
+        return;
+    }
+
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
 function showQuestion(question, isRestoring = false, expireTimestamp = null) {
-    questionElement.innerText = question.question
+    questionElement.innerText = decodeHtmlEntities(question.question);
     
     let answerButtons;
     if (isRestoring && currentShuffledAnswers.length > 0) {
         answerButtons = currentShuffledAnswers;
     } else { 
-        answerButtons = [...question.answers].sort(() => Math.random() - .5);
+        answerButtons = shuffle(question.answers);
         currentShuffledAnswers = answerButtons
     }
 
     answerButtons.forEach(answer => {
         const button = document.createElement('button')
-        button.innerText = answer.text
+        button.innerText = decodeHtmlEntities(answer.text)
         button.classList.add('btn')
         if(answer.correct) {
             button.dataset.correct = answer.correct
@@ -192,10 +258,7 @@ function showQuestion(question, isRestoring = false, expireTimestamp = null) {
         return;
     }
     let durationInSeconds, expirationTime; 
-    if(question.duration == undefined) {
-        question.duration = 5;
-    }
-    durationInSeconds = question.duration - (score*.25)
+    durationInSeconds = question.duration
 
     expirationTime = Date.now() + (durationInSeconds * 1000);
     timerExpire = expirationTime;
@@ -243,8 +306,8 @@ function ranOutOfTime() {
             currentQuestionIndex, 
             elapsedTime, 
             questionNumber.question, 
-            'ommited', 
-            'false'))
+            'omitted', 
+            false))
     askedQuestionsArray.push(review)
     
     showAnswers(false)
@@ -357,14 +420,23 @@ function reviewQuestions() {
         const question = document.createElement('details')
         const sum = document.createElement('summary')
 
-        sum.innerText = `Question #${q.questionNumber +1}: ${q.questionGiven}`
+        const questiontxt = decodeHtmlEntities(q.questionGiven)
+
+        sum.innerText = `Question #${q.questionNumber +1}: ${questiontxt}`
         question.appendChild(sum)
 
         const responseGiven = document.createElement('p')
-        responseGiven.innerText = `your answer: ${q.response}` 
+        const responsetxt = decodeHtmlEntities(q.response)
+        responseGiven.innerText = `your answer: ${responsetxt}` 
 
         const seconds = document.createElement('p')
-        seconds.innerText = `you took ${(q.elapsedMs / 1000)} seconds `
+        const secondstxt = (q.elapsedMs / 1000).toFixed(1)
+        if (secondstxt == 1) {
+            seconds.innerText = `you took ${secondstxt} second`
+        } 
+        else { 
+            seconds.innerText = `you took ${secondstxt} seconds `
+        }
 
         const correct = document.createElement('p')
         const isCorrect = q.correct == 'true'
@@ -379,4 +451,18 @@ function reviewQuestions() {
 function goBack() {
     containerElement.classList.remove("hide")
     reviewQuestionContainerElement.classList.add("hide")
+}
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i+1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function decodeHtmlEntities(text) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = text;
+    return txt.value;
 }
