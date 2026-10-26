@@ -45,7 +45,7 @@ let isGameOver;
 
 loadSave()
 
-settingsForm.addEventListener("submit", (event) => {
+settingsForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const formData = new FormData(settingsForm);
@@ -58,7 +58,7 @@ settingsForm.addEventListener("submit", (event) => {
     if(category == 'math') categoryNum = 19;
     if(category == 'sports') categoryNum = 21;
 
-    getData(amount, categoryNum);
+    await getData(amount, categoryNum);
 
     shuffledQuestions = shuffle(questions);
     saveGame();
@@ -165,32 +165,45 @@ function startGame() {
     isGameOver = false;
     clearScore();
     askedQuestionsArray.length = 0
+    currentQuestionIndex = 0;
 
     startButton.classList.add('hide')
     settingsForm.classList.remove('hide')
-    //scoreContainerElement.classList.add('hide')
+}
 
+function restartGame() {
+    localStorage.removeItem('gameSave')
+
+    startGame();
+    startScreenElement.classList.remove('hide');
+    scoreContainerElement.classList.add('hide');
 }
 
 function setNextQuestion() {
     resetState()
+
+    if(!shuffledQuestions || !shuffledQuestions[currentQuestionIndex]) {
+        updateScore()
+        return;
+    }
+
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
 function showQuestion(question, isRestoring = false, expireTimestamp = null) {
-    questionElement.innerText = question.question
+    questionElement.innerText = decodeHtmlEntities(question.question);
     
     let answerButtons;
     if (isRestoring && currentShuffledAnswers.length > 0) {
         answerButtons = currentShuffledAnswers;
     } else { 
-        answerButtons = [...question.answers].sort(() => Math.random() - .5);
+        answerButtons = shuffle(question.answers);
         currentShuffledAnswers = answerButtons
     }
 
     answerButtons.forEach(answer => {
         const button = document.createElement('button')
-        button.innerText = answer.text
+        button.innerText = decodeHtmlEntities(answer.text)
         button.classList.add('btn')
         if(answer.correct) {
             button.dataset.correct = answer.correct
@@ -264,8 +277,8 @@ function ranOutOfTime() {
             currentQuestionIndex, 
             elapsedTime, 
             questionNumber.question, 
-            'ommited', 
-            'false'))
+            'omitted', 
+            false))
     askedQuestionsArray.push(review)
     
     showAnswers(false)
@@ -378,14 +391,23 @@ function reviewQuestions() {
         const question = document.createElement('details')
         const sum = document.createElement('summary')
 
-        sum.innerText = `Question #${q.questionNumber +1}: ${q.questionGiven}`
+        const questiontxt = decodeHtmlEntities(q.questionGiven)
+
+        sum.innerText = `Question #${q.questionNumber +1}: ${questiontxt}`
         question.appendChild(sum)
 
         const responseGiven = document.createElement('p')
-        responseGiven.innerText = `your answer: ${q.response}` 
+        const responsetxt = decodeHtmlEntities(q.response)
+        responseGiven.innerText = `your answer: ${responsetxt}` 
 
         const seconds = document.createElement('p')
-        seconds.innerText = `you took ${(q.elapsedMs / 1000)} seconds `
+        const secondstxt = (q.elapsedMs / 1000).toFixed(1)
+        if (secondstxt == 1) {
+            seconds.innerText = `you took ${secondstxt} second`
+        } 
+        else { 
+            seconds.innerText = `you took ${secondstxt} seconds `
+        }
 
         const correct = document.createElement('p')
         const isCorrect = q.correct == 'true'
@@ -408,4 +430,10 @@ function shuffle(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+function decodeHtmlEntities(text) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = text;
+    return txt.value;
 }
