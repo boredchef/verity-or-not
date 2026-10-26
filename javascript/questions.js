@@ -16,6 +16,7 @@ export async function getData(amount, category) {
     // return string;
   } catch (error) {
     console.error(error.message);
+    throw error;
   }
   
   return sortToQuestionList(string);
