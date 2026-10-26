@@ -25,8 +25,6 @@ let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 let timerInterval = null;
 let startTime, timerExpire;
 
-const sportsCategory = 21;
-
 class ReviewQuestion {
     constructor(questionNumber, elapsedMs, questionGiven, response, correct) {
         this.questionNumber = questionNumber

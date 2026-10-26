@@ -78,6 +78,7 @@ export async function getData(amount, category) {
 }
 
 function sortToQuestionList(data) {
+  if(!data) return;
   const json = JSON.parse(data);
   json.forEach(({ question, correct_answer, incorrect_answers }) => {
     const answers = [ {text: correct_answer, correct: true} ]
@@ -85,7 +86,7 @@ function sortToQuestionList(data) {
       answers.push({ text: a, correct: false });
     });
     const addQuestion = {
-      question: question.toString(),
+      question: question,
       answers: answers,
       duration: 5
     }
