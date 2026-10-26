@@ -69,6 +69,7 @@ export async function getData(amount, category) {
 
     const result = await response.json();
     string = JSON.stringify(result.results);
+    console.log(string)
     // return string;
   } catch (error) {
     console.error(error.message);

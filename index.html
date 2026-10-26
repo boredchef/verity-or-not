@@ -26,7 +26,7 @@
                 <label for="math">math</label><br>
 
                 <label>how many?</label><br>
-                <input type="number" id="question-count" name="question-count"><br>
+                <input type="number" id="question-count" name="question-count" min="1" max="50"><br>
 
                 <button type="submit">go!</button>
 
@@ -42,6 +42,7 @@
                 <div id="timer-bar"></div>
             </div>
             <button id="next-btn" class="next-btn btn hide">next question</button>
+            <button id="quit-btn" class="quit-btn btn">🔄</button>
         </div>
         
         <div id="score-container" class="hide">
@@ -62,5 +63,15 @@
 
         </div>
     </div>
+
+    <dialog id="confirm-dialog">
+        <div class="dialog">
+            <h2>are you sure?</h2>
+            <p>clicking YES will reset progress!</p>
+
+            <button id="confirm-dialog-yes" autofocus>YES</button>
+            <button id="confirm-dialog-no">NO!</button>
+        </div>
+    </dialog>
 </body>
 </html>

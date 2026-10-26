@@ -5,6 +5,11 @@ const nextButton = document.getElementById('next-btn');
 const restartButton = document.getElementById('restart-btn');
 const reviewButton = document.getElementById('review-btn');
 const backButton = document.getElementById('back-btn');
+const quitButton = document.getElementById('quit-btn');
+
+const confirmModal = document.getElementById('confirm-dialog');
+const yesBtn = document.getElementById('confirm-dialog-yes');
+const noBtn = document.getElementById('confirm-dialog-no')
 
 const startScreenElement = document.getElementById('start-screen');
 const questionContainerElement = document.getElementById('question-container');
@@ -72,22 +77,39 @@ nextButton.addEventListener('click', () => {
     currentQuestionIndex++
     setNextQuestion()
 })
-restartButton.addEventListener('click', startGame)
+restartButton.addEventListener('click', restartGame)
 reviewButton.addEventListener('click', reviewQuestions)
 backButton.addEventListener('click', goBack)
+quitButton.addEventListener('click', doRestart)
 
 document.addEventListener('keypress', (e) => {
     const keyPressed = e.key
     if (keyPressed == "r") {
-        const a = confirm("u sure u wanna clear save") 
-        if(a) {
-            localStorage.removeItem('gameSave')
-            window.location.reload();
-        } else {
-            return;
-        }
+        doRestart()
     }
 })
+
+function doRestart() {
+    // const a = confirm("u sure u wanna clear save") 
+    //     if(a) {
+    //         localStorage.removeItem('gameSave')
+    //         window.location.reload();
+    //     } else {
+    //         return;
+    //     }
+    confirmModal.showModal(); 
+}
+
+
+yesBtn.addEventListener('click', () => {
+    if(localStorage.getItem('gameSave') == null) return;
+    localStorage.removeItem('gameSave');
+    window.location.reload();
+  });
+
+noBtn.addEventListener('click', () => {
+    confirmModal.close();
+  });
 
 function saveGame() {
     const gameState = {
