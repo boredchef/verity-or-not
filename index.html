@@ -16,20 +16,20 @@
             <p>lets test those thinking skills</p>
             <button id="start-btn" class="start-btn btn">start game</button>
             <form id="user-response" class="hide">
-                
-                <label for="category">what category?</label><br>
-                <input type="radio" id="science" name="category" value="science">
-                <label for="science">science</label><br>
-                <input type="radio" id="sports" name="category" value="sports">
-                <label for="sports">sports</label><br>
-                <input type="radio" id="math" name="category" value="math">
-                <label for="math">math</label><br>
+                <div class="response">
+                    <label for="category">category</label>
+                    <select id="category" name="category">
+                        <option value="general" selected>general</option>
+                        <option value="sports">sports</option>
+                        <option value="science">science</option>
+                        <option value="math">math</option>
+                    </select>
 
-                <label>how many?</label><br>
-                <input type="number" id="question-count" name="question-count" min="1" max="50"><br>
-
+                    <label for="question-count">how many?</label>
+                    <input class="slider-look" type="range" id="question-count" name="question-count" min="1" max="50" value="10" required><br>
+                    <output for="question-count" id="sliderValue">10</output>
+                </div>
                 <button type="submit">go!</button>
-
             </form>
         </div>
 
@@ -69,7 +69,7 @@
             <h2>are you sure?</h2>
             <p>clicking YES will reset progress!</p>
 
-            <button id="confirm-dialog-yes" autofocus>YES</button>
+            <button id="confirm-dialog-yes">YES!</button>
             <button id="confirm-dialog-no">NO!</button>
         </div>
     </dialog>

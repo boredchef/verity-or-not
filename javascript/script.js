@@ -24,6 +24,8 @@ const scoreContainerElement = document.getElementById('score-container');
 const highScoreElement = document.getElementById('highscore');
 const scoreElement = document.getElementById('score');
 const settingsForm = document.getElementById('user-response');
+const slider = document.getElementById("question-count");
+const output = document.getElementById("sliderValue");
 
 let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
@@ -48,6 +50,10 @@ let isGameOver;
 
 loadSave()
 
+slider.addEventListener("input", function() {
+  output.textContent = this.value;
+});
+
 settingsForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -57,6 +63,7 @@ settingsForm.addEventListener("submit", async (event) => {
 
     let categoryNum;
 
+    if(category == 'general') categoryNum = 9;
     if(category == 'science') categoryNum = 17;
     if(category == 'math') categoryNum = 19;
     if(category == 'sports') categoryNum = 21;
@@ -90,13 +97,6 @@ document.addEventListener('keypress', (e) => {
 })
 
 function doRestart() {
-    // const a = confirm("u sure u wanna clear save") 
-    //     if(a) {
-    //         localStorage.removeItem('gameSave')
-    //         window.location.reload();
-    //     } else {
-    //         return;
-    //     }
     confirmModal.showModal(); 
 }
 
