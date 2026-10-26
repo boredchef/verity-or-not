@@ -12,8 +12,6 @@ export async function getData(amount, category) {
 
     const result = await response.json();
     string = JSON.stringify(result.results);
-    console.log(string)
-    // return string;
   } catch (error) {
     console.error(error.message);
     throw error;
@@ -27,12 +25,8 @@ function sortToQuestionList(data) {
   const json = JSON.parse(data);
   json.forEach(({ question, correct_answer, incorrect_answers }) => {
     const answers = [ {text: correct_answer, correct: true} ]
-    console.log(question)
     const word_count = question.trim().split(/\s+/).length;
-    console.log(word_count)
-
     const duration = ( word_count / 150 ) * 60;
-    console.log(duration)
 
     incorrect_answers.forEach(a => {
       answers.push({ text: a, correct: false });
