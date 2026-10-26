@@ -26,6 +26,7 @@ const scoreElement = document.getElementById('score');
 const settingsForm = document.getElementById('user-response');
 const slider = document.getElementById("question-count");
 const output = document.getElementById("sliderValue");
+const errorMsg = document.getElementById("error-msg")
 
 let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
@@ -68,14 +69,25 @@ settingsForm.addEventListener("submit", async (event) => {
     if(category == 'math') categoryNum = 19;
     if(category == 'sports') categoryNum = 21;
 
-    await getData(amount, categoryNum);
+    errorMsg.classList.add('hide');
+    errorMsg.innerText = "";
 
-    shuffledQuestions = shuffle(questions);
-    saveGame();
-    setNextQuestion();
-    settingsForm.classList.add('hide');
-    startScreenElement.classList.add('hide');
-    questionContainerElement.classList.remove('hide');
+    try {
+        questions.length = 0;
+        await getData(amount, categoryNum);
+
+        shuffledQuestions = shuffle(questions);
+        saveGame();
+        setNextQuestion();
+
+        settingsForm.classList.add('hide');
+        startScreenElement.classList.add('hide');
+        questionContainerElement.classList.remove('hide');
+    } catch (error) {
+        console.error(error);
+        errorMsg.innerText = "too many requests, pls try again later";
+        errorMsg.classList.remove("hide");
+    }
 
 })
 
