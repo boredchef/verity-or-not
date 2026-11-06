@@ -85,7 +85,7 @@ settingsForm.addEventListener("submit", async (event) => {
         questionContainerElement.classList.remove('hide');
     } catch (error) {
         console.error(error);
-        errorMsg.innerText = "too many requests, pls try again later";
+        errorMsg.innerText = error.message;
         errorMsg.classList.remove("hide");
     }
 
@@ -114,7 +114,6 @@ function doRestart() {
 
 
 yesBtn.addEventListener('click', () => {
-    if(localStorage.getItem('gameSave') == null) return;
     localStorage.removeItem('gameSave');
     window.location.reload();
   });
@@ -354,12 +353,12 @@ function clearScore() {
 
 function updateScore() {
     isGameOver = true;
-    saveGame()
-    verdict()
     scoreElement.innerText = score
     if(score > highscore) { 
         highscore = score
     }
+    saveGame()
+    verdict()
     highScoreElement.innerText = highscore
     scoreContainerElement.classList.remove('hide')
 }
