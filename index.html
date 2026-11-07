@@ -16,7 +16,7 @@
             <p>lets test those thinking skills</p>
             <button id="start-btn" class="start-btn btn">start game</button>
             <form id="user-response" class="hide">
-                <div class="response">
+                <div id="user-response-form" class="response">
                     <label for="category">category</label>
                     <select id="category" name="category">
                         <option value="general" selected>general</option>
@@ -29,7 +29,8 @@
                     <input class="slider-look" type="range" id="question-count" name="question-count" min="1" max="50" value="10" required><br>
                     <output for="question-count" id="sliderValue">10</output>
                 </div>
-                <button type="submit">go!</button>
+                <button type="submit" id="submit">go!</button>
+                <div id="loader" class="loader hide"></div>
                 <p id="error-msg" class="error-text hide" style="color: red;"></p>
             </form>
         </div>

@@ -1,9 +1,12 @@
 export const questions = [];
 
+const userResponseDiv = document.getElementById("user-response-form")
+const submitButton = document.getElementById("submit");
+const loader = document.getElementById("loader");
 
 export async function getData(amount, category) {
-  // const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}`;
-  const url = `https://mock.httpstatus.codes/status/429`
+  const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}`;
+  spinner(true);
   try {
     console.log(`trying this url! ${url}`)
     const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
@@ -35,7 +38,8 @@ export async function getData(amount, category) {
       console.error(`${error.name}: ${error.message}`);
     }
     throw error;
-
+  } finally {
+    spinner(false);
   }
 }
 
@@ -60,4 +64,18 @@ function sortToQuestionList(data) {
   });
   console.log(questions)
   console.log("success!")
+}
+
+function spinner(doSpin) {
+  if(doSpin == false) {
+    userResponseDiv.classList.remove('hide');
+    submitButton.classList.remove('hide');
+    loader.classList.add('hide');
+  }
+
+  if(doSpin == true) {
+    userResponseDiv.classList.add('hide');
+    submitButton.classList.add('hide');
+    loader.classList.remove('hide');
+  }
 }
