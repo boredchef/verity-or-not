@@ -1,10 +1,15 @@
 export const questions = [];
 
+
 export async function getData(amount, category) {
-  const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}`;
+  // const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}`;
+  const url = `https://mock.httpstatus.codes/status/429`
   try {
     console.log(`trying this url! ${url}`)
-    const response = await fetch(url);
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if(response.status === 429) {
+      throw new Error("opentriviadb: too many requests, try again in a bit")
+    }
     if (!response.ok) {
       throw new Error(`response status: ${response.status}`);
     }
@@ -22,8 +27,15 @@ export async function getData(amount, category) {
 
     sortToQuestionList(result.results);
   } catch (error) {
-    console.error(error.message);
+    if (error.name === "TimeoutError") {
+      console.error("timed out, took more than 5 seconds to get a result!");
+    } else if (error.name === "TypeError") {
+      console.error("network error: ", error.message);
+    } else {
+      console.error(`${error.name}: ${error.message}`);
+    }
     throw error;
+
   }
 }
 
