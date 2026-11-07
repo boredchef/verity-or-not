@@ -1,3 +1,5 @@
+import { fallbackQuestions } from "../fallback/fallback.js";
+
 export const questions = [];
 
 const userResponseDiv = document.getElementById("user-response-form")
@@ -6,6 +8,9 @@ const loader = document.getElementById("loader");
 
 export async function getData(amount, category) {
   const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}`;
+  let results;
+  let reason = null;
+
   spinner(true);
   try {
     console.log(`trying this url! ${url}`)
@@ -19,7 +24,6 @@ export async function getData(amount, category) {
 
     const result = await response.json();
     
-    // from opentriviadb api docs
     if(result.response_code === 1) throw new Error("opentriviadb: not enough questions for this category");
     if(result.response_code === 5) throw new Error("opentriviadb: ratelimited, try again in a bit");
 
@@ -27,20 +31,25 @@ export async function getData(amount, category) {
     if(result.response_code !== 0) {
       throw new Error(`opentriviadb error, response_code: ${result.response_code}`);
     }
-
-    sortToQuestionList(result.results);
+    
+    results = result.results;
   } catch (error) {
     if (error.name === "TimeoutError") {
-      console.error("timed out, took more than 5 seconds to get a result!");
+      reason = "took more than 5 seconds to get a result!";
     } else if (error.name === "TypeError") {
-      console.error("network error: ", error.message);
+      reason = `couldn't connect to server`;
     } else {
-      console.error(`${error.name}: ${error.message}`);
+      reason = error.message;
     }
-    throw error;
+
+    console.warn("something failed, using fallback: ", error.message);
+    results = fallbackQuestions.slice(0, Number(amount))
   } finally {
     spinner(false);
   }
+
+  sortToQuestionList(results);
+  return reason;
 }
 
 function sortToQuestionList(data) {
@@ -49,7 +58,7 @@ function sortToQuestionList(data) {
   data.forEach(({ question, correct_answer, incorrect_answers }) => {
     const answers = [ {text: correct_answer, correct: true} ]
     const word_count = question.trim().split(/\s+/).length;
-    const duration = ( word_count / 150 ) * 60;
+    const duration = 8 + ( word_count / 150 ) * 60;
 
     incorrect_answers.forEach(a => {
       answers.push({ text: a, correct: false });

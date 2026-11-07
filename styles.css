@@ -296,3 +296,8 @@ button[type=submit]:hover {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+footer#notice {
+    margin-top: 10px;
+    font-size: small;
+}
