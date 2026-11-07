@@ -26,7 +26,7 @@ const scoreElement = document.getElementById('score');
 const settingsForm = document.getElementById('user-response');
 const slider = document.getElementById("question-count");
 const output = document.getElementById("sliderValue");
-const errorMsg = document.getElementById("error-msg")
+const errorMsg = document.getElementById("notice")
 
 let shuffledQuestions, currentShuffledAnswers = [], currentQuestionIndex;
 
@@ -74,18 +74,23 @@ settingsForm.addEventListener("submit", async (event) => {
 
     try {
         questions.length = 0;
-        await getData(amount, categoryNum);
-
+        const usedFallback = await getData(amount, categoryNum);
+        
         shuffledQuestions = shuffle(questions);
         saveGame();
         setNextQuestion();
+
+        if (usedFallback) {
+            errorMsg.innerText = `${usedFallback} used offline questions`;
+            errorMsg.classList.remove("hide");
+        }
 
         settingsForm.classList.add('hide');
         startScreenElement.classList.add('hide');
         questionContainerElement.classList.remove('hide');
     } catch (error) {
         console.error(error);
-        errorMsg.innerText = "too many requests, pls try again later";
+        errorMsg.innerText = error.message;
         errorMsg.classList.remove("hide");
     }
 
@@ -114,7 +119,6 @@ function doRestart() {
 
 
 yesBtn.addEventListener('click', () => {
-    if(localStorage.getItem('gameSave') == null) return;
     localStorage.removeItem('gameSave');
     window.location.reload();
   });
@@ -354,12 +358,12 @@ function clearScore() {
 
 function updateScore() {
     isGameOver = true;
-    saveGame()
-    verdict()
     scoreElement.innerText = score
     if(score > highscore) { 
         highscore = score
     }
+    saveGame()
+    verdict()
     highScoreElement.innerText = highscore
     scoreContainerElement.classList.remove('hide')
 }

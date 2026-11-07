@@ -282,3 +282,22 @@ button[type=submit]:hover {
     border-radius: 5px;
     outline: none;
 }
+
+.loader {
+    border: 16px solid lightgray;
+    border-top: 16px solid lightblue;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+footer#notice {
+    margin-top: 10px;
+    font-size: small;
+}
